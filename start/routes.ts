@@ -12,8 +12,9 @@ const AuthController = () => import('#controllers/auth_controller')
 const PostsController = () => import('#controllers/posts_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const FeedController = () => import('#controllers/feed_controller')
 
-router.on('/').render('pages/home')
+router.get('/', [FeedController, 'index'])
 
 router.get('/register', [RegisterController, 'create']).as('register.create')
 router.post('/register', [RegisterController, 'store']).as('register.store')
