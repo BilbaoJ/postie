@@ -33,4 +33,16 @@ export default class PostsController {
     })
     return response.redirect('/')
   }
+
+  async destroy({ params, response, session }: HttpContext) {
+    const post = await Post.findOrFail(params.id)
+    await post.delete()
+    session.flash({
+      notification: {
+        type: 'success',
+        message: 'Post deleted',
+      },
+    })
+    return response.redirect().back()
+  }
 }

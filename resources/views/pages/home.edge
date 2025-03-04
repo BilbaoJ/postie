@@ -39,7 +39,11 @@
               href="{{ route('posts.edit', { id: post.id }) }}">
                 Edit
               </a>
-              <button class="text-gray-500 text-sm hover:text-red-500">Delete</button>
+
+              <form action="{{  route('posts.destroy', { id: post.id }, { qs: { _method: 'DELETE' } })  }}" method="post">
+                {{ csrfField() }}
+                <button type="submit" class="text-gray-500 text-sm hover:text-red-500">Delete</button>
+              </form>
             </div>
           @end
         </div>

@@ -27,3 +27,4 @@ router.delete('/logout', [AuthController, 'destroy']).as('auth.destroy').use(mid
 router.post('/posts', [PostsController, 'store']).as('posts.store').use(middleware.auth())
 router.get('/posts/:id/edit', [PostsController, 'edit']).as('posts.edit').use(middleware.auth())
 router.patch('/posts/:id', [PostsController, 'update']).as('posts.update').use(middleware.auth())
+router.delete('/posts/:id', [PostsController, 'destroy']).as('posts.destroy').use(middleware.auth())
