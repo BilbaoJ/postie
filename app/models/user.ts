@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import Post from './post.js'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -36,7 +36,18 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Post)
   declare posts: HasMany<typeof Post>
 
+  @manyToMany(() => Post, {
+    pivotTimestamps: true,
+  })
+  declare likes: ManyToMany<typeof Post>
+
   get handle(): string {
     return `@${this.username}`
+  }
+
+  async hasLikedPost(postId: number): Promise<boolean> {
+    const self = this as User
+
+    return !!(await self.related('likes').query().where('posts.id', postId).first())
   }
 }
